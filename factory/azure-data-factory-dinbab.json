@@ -1,0 +1,9 @@
+{
+	"name": "azure-data-factory-dinbab",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "bbfbfb0b-e0d7-4297-b665-f35277167047",
+		"tenantId": "851a9dd6-dab8-4d37-b929-a13227cf729c"
+	}
+}
