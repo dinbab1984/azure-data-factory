@@ -61,7 +61,7 @@
 				]
 			},
 			{
-				"name": "Power Query1",
+				"name": "Number_of_Customers_by_Region",
 				"type": "ExecuteWranglingDataflow",
 				"dependsOn": [],
 				"policy": {
