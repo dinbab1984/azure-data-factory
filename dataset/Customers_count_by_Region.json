@@ -9,7 +9,9 @@
 		"type": "Json",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation"
+				"type": "AzureBlobFSLocation",
+				"fileName": "Customer_count_by_Resion.json",
+				"fileSystem": "target"
 			}
 		},
 		"schema": {}
