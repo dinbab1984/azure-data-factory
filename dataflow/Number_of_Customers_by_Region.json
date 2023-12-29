@@ -1,5 +1,5 @@
 {
-	"name": "powerquery1",
+	"name": "Number_of_Customers_by_Region",
 	"properties": {
 		"type": "WranglingDataFlow",
 		"typeProperties": {
