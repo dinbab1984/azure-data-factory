@@ -85,6 +85,57 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Number_of_Customers_by_Region",
+						"type": "ExecuteWranglingDataflow",
+						"dependsOn": [
+							{
+								"activity": "ADSL-ADSL-csv",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Number_of_Customers_by_Region",
+								"type": "DataFlowReference",
+								"datasetParameters": {
+									"Customers_csv": {},
+									"UserQueryCustomerscountbyRegion": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"queries": [
+								{
+									"queryName": "UserQuery",
+									"dataflowSinks": [
+										{
+											"name": "UserQueryCustomerscountbyRegion",
+											"dataset": {
+												"referenceName": "Customers_count_by_Region",
+												"type": "DatasetReference",
+												"parameters": {}
+											},
+											"script": "sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> UserQueryCustomerscountbyRegion"
+										}
+									]
+								}
+							]
+						}
 					}
 				],
 				"policy": {
@@ -94,7 +145,9 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Customers_csv')]",
-				"[concat(variables('factoryId'), '/datasets/Customers_json')]"
+				"[concat(variables('factoryId'), '/datasets/Customers_json')]",
+				"[concat(variables('factoryId'), '/dataflows/Number_of_Customers_by_Region')]",
+				"[concat(variables('factoryId'), '/datasets/Customers_count_by_Region')]"
 			]
 		},
 		{
@@ -242,6 +295,53 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Number_of_Customers_by_Region')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "WranglingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"name": "Customers_csv",
+							"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~>  Customers_csv",
+							"dataset": {
+								"referenceName": "Customers_csv",
+								"type": "DatasetReference"
+							}
+						}
+					],
+					"script": "section Section1;\r\nshared Customers_csv = let AdfDoc = AzureStorage.DataLakeContents(\"https://stoageaccountadf.dfs.core.windows.net/source/customers.csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]) in  PromotedHeaders;\r\nshared UserQuery = let Source = #\"Customers_csv\",\r\n  #\"Grouped rows\" = Table.Group(Source, {\"region\"}, {{\"Count\", each Table.RowCount(_), Int64.Type}}) in #\"Grouped rows\";\r\n",
+					"documentLocale": "en-us"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Customers_csv')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Customers_count_by_Region')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage_ADF",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage_ADF')]"
+			]
 		}
 	]
 }
