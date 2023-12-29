@@ -1,0 +1,100 @@
+{
+	"name": "Customers_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage_ADF",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "customers.csv",
+				"fileSystem": "source"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "customer_id",
+				"type": "String"
+			},
+			{
+				"name": "tax_id",
+				"type": "String"
+			},
+			{
+				"name": "tax_code",
+				"type": "String"
+			},
+			{
+				"name": "customer_name",
+				"type": "String"
+			},
+			{
+				"name": "state",
+				"type": "String"
+			},
+			{
+				"name": "city",
+				"type": "String"
+			},
+			{
+				"name": "postcode",
+				"type": "String"
+			},
+			{
+				"name": "street",
+				"type": "String"
+			},
+			{
+				"name": "number",
+				"type": "String"
+			},
+			{
+				"name": "unit",
+				"type": "String"
+			},
+			{
+				"name": "region",
+				"type": "String"
+			},
+			{
+				"name": "district",
+				"type": "String"
+			},
+			{
+				"name": "lon",
+				"type": "String"
+			},
+			{
+				"name": "lat",
+				"type": "String"
+			},
+			{
+				"name": "ship_to_address",
+				"type": "String"
+			},
+			{
+				"name": "valid_from",
+				"type": "String"
+			},
+			{
+				"name": "valid_to",
+				"type": "String"
+			},
+			{
+				"name": "units_purchased",
+				"type": "String"
+			},
+			{
+				"name": "loyalty_segment",
+				"type": "String"
+			}
+		]
+	}
+}

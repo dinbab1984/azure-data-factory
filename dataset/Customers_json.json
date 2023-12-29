@@ -1,0 +1,19 @@
+{
+	"name": "Customers_json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage_ADF",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Customers.json",
+				"fileSystem": "target"
+			}
+		},
+		"schema": {}
+	}
+}
