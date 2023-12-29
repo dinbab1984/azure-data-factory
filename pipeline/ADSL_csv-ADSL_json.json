@@ -63,7 +63,14 @@
 			{
 				"name": "Number_of_Customers_by_Region",
 				"type": "ExecuteWranglingDataflow",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "ADSL-ADSL-csv",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -81,7 +88,21 @@
 						"coreCount": 8,
 						"computeType": "General"
 					},
-					"queries": []
+					"queries": [
+						{
+							"queryName": "UserQuery",
+							"dataflowSinks": [
+								{
+									"name": "UserQueryCustomerscountbyRegion",
+									"dataset": {
+										"referenceName": "Customers_count_by_Region",
+										"type": "DatasetReference"
+									},
+									"script": "sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> UserQueryCustomerscountbyRegion"
+								}
+							]
+						}
+					]
 				}
 			}
 		],
